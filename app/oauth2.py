@@ -40,9 +40,6 @@ def get_exception(msg: str):
     )
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
-    token = verify_access_token(token, get_exception("Could not validate credentials"))
+    token = verify_access_token(token, get_exception("Token invalid or Expired"))
     user = db.query(models.User).filter(models.User.id == token.id).first()
-    if not user:
-        raise get_exception("Please validate your account !")
-
     return user
